@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SDIHS School Profile</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        /* HEADER */
+        header {
+            background-color: #F77FB3;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        nav.topnav {
+            background-color: pink;
+            overflow: hidden;
+        }
+
+        nav.topnav a {
+            float: left;
+            padding: 14px 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        nav.topnav a:hover {
+            background-color: violet;
+        }
+
+        /* CONTAINER */
+        .container {
+            display: flex;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 20%;
+            background-color: #f4c2c2;
+            padding: 20px;
+            height: 410px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .sidebar li {
+            margin-bottom: 10px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .sidebar li:hover {
+            background-color: #f4c2c2;
+        }
+
+        /* ARTICLE */
+        article {
+            padding: 30px;
+            width: 70%;
+            background-color: #f4c2c2;
+            height: 390px;
+            overflow-y: auto;
+        } 
+
+        /* FOOTER */
+        footer {
+            background-color: #F77FB3;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        /* Quiz Styles */
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .question {
+            margin-bottom: 15px;
+        }
+
+        .question p {
+            font-weight: bold;
+        }
+
+        label {
+            display: block;
+            margin: 5px 0;
+            cursor: pointer;
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background: #2575fc;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #1a5ed8;
+        }
+
+        #result {
+            text-align: center;
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #savedResults {
+            margin-top: 20px;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    
+         .sidebar li {
+    background-color: #f4c2c2;
+    color: black;
+    float: none;
+    display: block;
+    margin-bottom: 15px;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #FFB6D5;
+}
+
+li {
+  float: left;
+}
+
+li a, .dropbtn {
+  display: inline-block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover, .dropdown:hover .dropbtn {
+  background-color: violet;
+}
+
+li.dropdown {
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #F77FB3;
+  min-width: 160px;
+}
+
+.dropdown-content a {
+  color: white;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: violet;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+    
+    
+    
+    
+    
+
+/* Fullscreen overlay */
+.snake-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: black;
+  z-index: 9999;
+}
+
+.snake-overlay iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.snake-overlay .exit-btn {
+  position: absolute;
+  top: 38px;              /* moved higher */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10000;
+  padding: 10px 18px;
+  font-size: 16px;
+  border-radius: 999px;
+}
+
+
+
+
+
+
+
+    
+    
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>TechSnake - SDIHS</h1>
+        <p>Santo Domingo Integrated High School</p>
+    </header>
+
+<!-- TOP NAV -->
+<ul class="topnav">
+  <li><a href="#" onclick="showHome()">Home</a></li>
+  <li><a href="#" onclick="showSnakeGame()">TechSnake</a></li>
+  <li><a href="#" onclick="showHowtoPlay()">How to Play</a></li>
+
+  <!-- ACTIVITIES DROPDOWN -->
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn">Activities</a>
+    <div class="dropdown-content">
+      <a href="#" onclick="showActivity1()">Activity 1</a>
+      <a href="#" onclick="showActivity2()">Activity 2</a>
+      <a href="#" onclick="showActivity3()">Activity 3</a>
+    </div>
+  </li>
+
+  <!-- ASSESSMENTS DROPDOWN -->
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn">Assessments</a>
+    <div class="dropdown-content">
+      <a href="#" onclick="showAssessment1()">Assessment 1</a>
+      <a href="#" onclick="showAssessment2()">Assessment 2</a>
+      <a href="#" onclick="showAssessment3()">Assessment 3</a>
+    </div>
+  </li>
+
+  <!-- ABOUT DROPDOWN -->
+  <li class="dropdown">
+    <a href="javascript:void(0)" class="dropbtn">About</a>
+    <div class="dropdown-content">
+      <a href="#">Cailey Emmanuel Cruz</a>
+      <a href="#">K-zen D. Marasigan</a>
+      <a href="#">Trixie Gonzales</a>
+      <a href="#">Mariel Oliviel P. Tacto</a>
+      <a href="#">Barallas Ayesa Carla B</a>
+    </div>
+  </li>
+</ul>
+
+
+
+
+</head>
+<body>
+
+    <div class="container">
+        <!-- SIDEBAR -->
+        <nav class="sidebar">
+            <ul>
+                <li onclick="showProfile()">Content</li>
+                <li  onclick="showSHS()">Objective</li>                         
+                <li onclick="showJHS()">Legal Basis</li>
+                <li onclick="showK()">References</li>
+                
+            </ul>
+        </nav>
+
+        <!-- ARTICLE -->
+        <article id="content">
+            <h1>TechSnake</h1>
+            <p>&#127800;TechSnake is an educational Snake Game where players control a snake and collect different computer parts.</p>
+            <p>&#127800;Each time a computer part is eaten, information about its function and use appears on the screen to help players learn while playing.</p>
+        </article>
+    </div>
+
+    <footer>
+        <p>&copy;Fourth Year Students Batch 2025 - 2026 </p>
+    </footer>
+
+    <!-- JAVASCRIPT  -->
+    <script>
+function showHome() {
+    document.body.classList.remove("fullscreen-game");
+    document.body.classList.remove("fullscreen-game");
+    document.getElementById("content").innerHTML = `
+    <h1>SDIHS</h1>
+    <p>&#127800;Mission<br>To protect and promote the right of every Filipino to quality, equitable, culture-based, and complete basic education where:
+
+Students learn in a child-friendly, gender-sensitive, safe, and motivating environment.
+Teachers facilitate learning and constantly nurture every learner.
+Administrators and staff ensure an enabling and supportive environment for effective learning.
+Family, community, and other stakeholders are actively engaged and share responsibility for developing life-long learners.
+    <p>&#127800;Vision<br>We dream of Filipinos who passionately love their country and whose values and competencies enable them to realize their full potential and contribute meaningfully to building the nation.
+
+As a learner-centered public institution, the Department of Education continuously improves itself to better serve its stakeholders.
+    <p>&#127800;Core Values<br>MAKA-Diyos<br>MAKA-Tao<br>MAKA-Kalikasan<br>MAKA-Bansa `;
+                
+}
+
+  // ------------------- ACTIVITIES -------------------
+
+function showActivity1() {
+    document.getElementById("content").innerHTML = `
+        <h1>Activity 1: Identify Items</h1>
+        <p>Please enter your name:</p>
+        <input type="text" id="studentNameActivities" placeholder="Enter your name" required>
+        <p>Write H if Hardware, S if Software, P if Peopleware.</p>
+        <form id="activity1Form">
+            <div class="question"><p>1. Keyboard</p><select name="a1"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>2. Microsoft Word</p><select name="a2"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>3. Computer technician</p><select name="a3"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>4. Mouse</p><select name="a4"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>5. Programmer</p><select name="a5"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>6. Windows OS</p><select name="a6"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>7. Printer</p><select name="a7"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>8. Student using a computer</p><select name="a8"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>9. Google Chrome</p><select name="a9"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+            <div class="question"><p>10. Motherboard</p><select name="a10"><option value="">Select</option><option value="H">H</option><option value="S">S</option><option value="P">P</option></select></div>
+        </form>
+        <button type="button" onclick="showActivity2()">Next → Activity 2</button>
+    `;
+}
+
+function showActivity2() {
+    document.getElementById("content").innerHTML = `
+        <h1>Activity 2: True or False</h1>
+        <p>Please enter your name (same as Activity 1):</p>
+        <input type="text" id="studentNameActivities" placeholder="Enter your name" required>
+        <p>Select True or False for each statement:</p>
+        <form id="activity2Form">
+            <div class="question"><p>1. Peopleware is important because it operates and manages computers.</p>
+                <select name="b1"><option value="">Select</option><option value="T">True</option><option value="F">False</option></select>
+            </div>
+            <div class="question"><p>2. A computer with hardware but no software can function normally.</p>
+                <select name="b2"><option value="">Select</option><option value="T">True</option><option value="F">False</option></select>
+            </div>
+            <div class="question"><p>3. Software can work without peopleware.</p>
+                <select name="b3"><option value="">Select</option><option value="T">True</option><option value="F">False</option></select>
+            </div>
+        </form>
+        <button type="button" onclick="showActivity3()">Next → Activity 3</button>
+    `;
+}
+
+function showActivity3() {
+    document.getElementById("content").innerHTML = `
+        <h1>Activity 3: Match the Description</h1>
+        <p>Please enter your name (same as Activity 1):</p>
+        <input type="text" id="studentNameActivities" placeholder="Enter your name" required>
+        <p>Choose the correct category for each description:</p>
+        <form id="activity3Form">
+            <div class="question"><p>1. Physical parts of a computer</p>
+                <select name="c1"><option value="">Select</option><option value="H">Hardware</option><option value="S">Software</option><option value="P">Peopleware</option></select>
+            </div>
+            <div class="question"><p>2. Instructions that tell the computer what to do</p>
+                <select name="c2"><option value="">Select</option><option value="H">Hardware</option><option value="S">Software</option><option value="P">Peopleware</option></select>
+            </div>
+            <div class="question"><p>3. People who operate or manage computers</p>
+                <select name="c3"><option value="">Select</option><option value="H">Hardware</option><option value="S">Software</option><option value="P">Peopleware</option></select>
+            </div>
+        </form>
+        <button type="button" onclick="submitAllActivities()">Submit All Activities</button>
+        <div id="activitiesResult"></div>
+        <div id="activitiesSavedResults"></div>
+    `;
+}
+
+function submitAllActivities() {
+    const name = document.getElementById("studentNameActivities").value.trim();
+    if(name === "") {
+        alert("Please enter your name.");
+        return;
+    }
+
+    // Activity 1 Answers
+    const aAnswers = {a1:"H",a2:"S",a3:"P",a4:"H",a5:"P",a6:"S",a7:"H",a8:"P",a9:"S",a10:"H"};
+    let score1 = 0;
+    for(let i=1;i<=10;i++){
+        const val = document.querySelector(`select[name="a${i}"]`)?.value;
+        if(val === aAnswers[`a${i}`]) score1++;
+    }
+
+    // Activity 2 Answers
+    const bAnswers = {b1:"T",b2:"F",b3:"F"};
+    let score2 = 0;
+    for(let i=1;i<=3;i++){
+        const val = document.querySelector(`select[name="b${i}"]`)?.value;
+        if(val === bAnswers[`b${i}`]) score2++;
+    }
+
+    // Activity 3 Answers
+    const cAnswers = {c1:"H",c2:"S",c3:"P"};
+    let score3 = 0;
+    for(let i=1;i<=3;i++){
+        const val = document.querySelector(`select[name="c${i}"]`)?.value;
+        if(val === cAnswers[`c${i}`]) score3++;
+    }
+
+    const totalScore = score1 + score2 + score3;
+    const record = {student: name, activity1: score1, activity2: score2, activity3: score3, total: totalScore, date: new Date().toLocaleString()};
+    let records = JSON.parse(localStorage.getItem("activityRecords")) || [];
+    records.push(record);
+    localStorage.setItem("activityRecords", JSON.stringify(records));
+
+    document.getElementById("activitiesResult").innerHTML = `
+        Thank you, <b>${name}</b><br>
+        Total Score: ${totalScore} (Activity 1: ${score1}, Activity 2: ${score2}, Activity 3: ${score3})
+        <hr>
+        <button onclick="showActivityRecords()">View All Submissions</button>
+    `;
+}
+
+function showActivityRecords() {
+    let records = JSON.parse(localStorage.getItem("activityRecords")) || [];
+    if(records.length === 0){
+        document.getElementById("activitiesSavedResults").innerHTML = "No submissions yet.";
+        return;
+    }
+
+    let output = "<h3>Activity Submissions</h3>";
+    records.forEach((r,i)=>{
+        output += `${i+1}. ${r.student} – Total: ${r.total} (A1: ${r.activity1}, A2: ${r.activity2}, A3: ${r.activity3}) [${r.date}]<br>`;
+    });
+    document.getElementById("activitiesSavedResults").innerHTML = output;
+}
+
+function showAssessment1() {
+    document.getElementById("content").innerHTML = `
+    <h1>ICT Quiz 1: Software, Hardware, Peopleware</h1>
+    <p><strong>10 Items</strong></p>
+    <label><strong>Name:</strong></label>
+    <input type="text" id="studentName1" placeholder="Enter your name" required>
+    <hr>
+    <form id="quizForm1">
+        <div class="question">
+            <p>1. Which of the following is an example of HARDWARE?</p>
+            <label><input type="radio" name="q1" value="A"> Microsoft Word</label>
+            <label><input type="radio" name="q1" value="B"> Keyboard</label>
+            <label><input type="radio" name="q1" value="C"> Computer Programmer</label>
+            <label><input type="radio" name="q1" value="D"> Operating System</label>
+        </div>
+        <div class="question">
+            <p>2. What category does a graphic designer who creates digital content fall into?</p>
+            <label><input type="radio" name="q2" value="A"> Software</label>
+            <label><input type="radio" name="q2" value="B"> Hardware</label>
+            <label><input type="radio" name="q2" value="C"> Peopleware</label>
+            <label><input type="radio" name="q2" value="D"> None of the above</label>
+        </div>
+        <div class="question">
+            <p>3. Which item below is considered SYSTEM SOFTWARE?</p>
+            <label><input type="radio" name="q3" value="A"> Adobe Photoshop</label>
+            <label><input type="radio" name="q3" value="B"> Printer</label>
+            <label><input type="radio" name="q3" value="C"> Network Administrator</label>
+            <label><input type="radio" name="q3" value="D"> Windows 11</label>
+        </div>
+        <div class="question">
+            <p>4. The physical components that make up a computer system are called:</p>
+            <label><input type="radio" name="q4" value="A"> Peopleware</label>
+            <label><input type="radio" name="q4" value="B"> Software</label>
+            <label><input type="radio" name="q4" value="C"> Hardware</label>
+            <label><input type="radio" name="q4" value="D"> Firmware</label>
+        </div>
+        <div class="question">
+            <p>5. A video editing application like CapCut belongs to which category?</p>
+            <label><input type="radio" name="q5" value="A"> Application Software</label>
+            <label><input type="radio" name="q5" value="B"> Hardware</label>
+            <label><input type="radio" name="q5" value="C"> Peopleware</label>
+            <label><input type="radio" name="q5" value="D"> System Software</label>
+        </div>
+        <div class="question">
+            <p>6. Who among these is part of PEOPLEWARE?</p>
+            <label><input type="radio" name="q6" value="A"> Laptop</label>
+            <label><input type="radio" name="q6" value="B"> Antivirus Program</label>
+            <label><input type="radio" name="q6" value="C"> IT Support Technician</label>
+            <label><input type="radio" name="q6" value="D"> USB Flash Drive</label>
+        </div>
+        <div class="question">
+            <p>7. Which of the following is NOT a type of hardware?</p>
+            <label><input type="radio" name="q7" value="A"> Monitor</label>
+            <label><input type="radio" name="q7" value="B"> Mouse</label>
+            <label><input type="radio" name="q7" value="C"> Spreadsheet Program</label>
+            <label><input type="radio" name="q7" value="D"> Hard Disk Drive</label>
+        </div>
+        <div class="question">
+            <p>8. What is the main purpose of system software?</p>
+            <label><input type="radio" name="q8" value="A"> To perform specific tasks for users</label>
+            <label><input type="radio" name="q8" value="B"> To manage and control computer hardware</label>
+            <label><input type="radio" name="q8" value="C"> To provide human expertise</label>
+            <label><input type="radio" name="q8" value="D"> To store physical data</label>
+        </div>
+        <div class="question">
+            <p>9. A teacher who uses computers to create lesson plans is an example of:</p>
+            <label><input type="radio" name="q9" value="A"> Software</label>
+            <label><input type="radio" name="q9" value="B"> Hardware</label>
+            <label><input type="radio" name="q9" value="C"> Peopleware</label>
+            <label><input type="radio" name="q9" value="D"> Both A and C</label>
+        </div>
+        <div class="question">
+            <p>10. Which pair correctly matches the category to its example?</p>
+            <label><input type="radio" name="q10" value="A"> Software – Scanner</label>
+            <label><input type="radio" name="q10" value="B"> Hardware – Web Browser</label>
+            <label><input type="radio" name="q10" value="C"> Peopleware – IT Trainer</label>
+            <label><input type="radio" name="q10" value="D"> Software – Technical Support Staff</label>
+        </div>
+
+        <button type="button" onclick="checkQuizAnswers1()">Submit Quiz</button>
+        <button type="button" onclick="showQuizRecords1()">View All Quiz Takers</button>
+    </form>
+    <div id="result1"></div>
+    <div id="savedResults1"></div>
+    `;
+}
+
+function checkQuizAnswers1() {
+    const name = document.getElementById("studentName1").value.trim();
+    if (!name) { alert("Please enter your name."); return; }
+
+    const answers = { q1:"B", q2:"C", q3:"D", q4:"C", q5:"A", q6:"C", q7:"C", q8:"B", q9:"C", q10:"C" };
+    let score = 0;
+
+    for (let q in answers) {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        if (selected && selected.value === answers[q]) score++;
+    }
+
+    const record = { student: name, score: score, total:10, date: new Date().toLocaleString() };
+    let records = JSON.parse(localStorage.getItem("quizRecords1")) || [];
+    records.push(record);
+    localStorage.setItem("quizRecords1", JSON.stringify(records));
+
+    document.getElementById("result1").innerHTML = `Thank you, <b>${name}</b><br>Your Score: ${score}/10`;
+}
+
+function showQuizRecords1() {
+    let records = JSON.parse(localStorage.getItem("quizRecords1")) || [];
+    if(records.length === 0) { document.getElementById("savedResults1").innerHTML="No quiz takers yet."; return; }
+
+    let output="<h3>Quiz 1 Takers</h3>";
+    records.forEach((r,i)=>{ output += `${i+1}. ${r.student} – ${r.score}/10 (${r.date})<br>`; });
+    document.getElementById("savedResults1").innerHTML = output;
+}
+
+        function showSHS() {
+            document.getElementById("content").innerHTML = `
+                <h1>Objectives</h1><br>
+                <p>&#127800;The objectives of this project are to:<br>
+‎
+<p>&#127800;‎Help students identify different computer parts<br>
+‎
+<p>&#127800;‎Explain the functions of each computer part through the game<br>
+‎
+<p>&#127800;‎Improve students’ interest in learning ICT using a game-based approach<br>
+‎
+‎
+            `;
+        }
+
+
+function showAssessment2() {
+    document.getElementById("content").innerHTML = `
+        <h1>ICT Quiz 2: Peopleware, Hardware, Software</h1>
+        <p><strong>10 Items</strong></p>
+
+        <label><strong>Name:</strong></label>
+        <input type="text" id="studentName" placeholder="Enter your name" required>
+        <hr>
+
+        <form id="quizForm">
+
+        <div class="question">
+            <p>1. Which term refers to the physical components of a computer?</p>
+            <label><input type="radio" name="q1" value="A"> Software</label>
+            <label><input type="radio" name="q1" value="B"> Peopleware</label>
+            <label><input type="radio" name="q1" value="C"> Hardware</label>
+            <label><input type="radio" name="q1" value="D"> Application</label>
+        </div>
+
+        <div class="question">
+            <p>2. Which of the following is an example of software?</p>
+            <label><input type="radio" name="q2" value="A"> Keyboard</label>
+            <label><input type="radio" name="q2" value="B"> Monitor</label>
+            <label><input type="radio" name="q2" value="C"> Microsoft Word</label>
+            <label><input type="radio" name="q2" value="D"> Mouse</label>
+        </div>
+
+        <div class="question">
+            <p>3. A person who designs, uses, or maintains computer systems is called:</p>
+            <label><input type="radio" name="q3" value="A"> Hardware</label>
+            <label><input type="radio" name="q3" value="B"> Software</label>
+            <label><input type="radio" name="q3" value="C"> Peopleware</label>
+            <label><input type="radio" name="q3" value="D"> Device</label>
+        </div>
+
+        <div class="question">
+            <p>4. Which item is considered hardware?</p>
+            <label><input type="radio" name="q4" value="A"> Operating System</label>
+            <label><input type="radio" name="q4" value="B"> Antivirus Program</label>
+            <label><input type="radio" name="q4" value="C"> Printer</label>
+            <label><input type="radio" name="q4" value="D"> Spreadsheet</label>
+        </div>
+
+        <div class="question">
+            <p>5. Who installs, repairs, and troubleshoots computers?</p>
+            <label><input type="radio" name="q5" value="A"> Programmer</label>
+            <label><input type="radio" name="q5" value="B"> Computer Technician</label>
+            <label><input type="radio" name="q5" value="C"> Application</label>
+            <label><input type="radio" name="q5" value="D"> CPU</label>
+        </div>
+
+        <div class="question">
+            <p>6. Which of the following belongs to software?</p>
+            <label><input type="radio" name="q6" value="A"> Scanner</label>
+            <label><input type="radio" name="q6" value="B"> Mouse</label>
+            <label><input type="radio" name="q6" value="C"> Windows OS</label>
+            <label><input type="radio" name="q6" value="D"> Monitor</label>
+        </div>
+
+        <div class="question">
+            <p>7. Network administrators are part of:</p>
+            <label><input type="radio" name="q7" value="A"> Hardware</label>
+            <label><input type="radio" name="q7" value="B"> Software</label>
+            <label><input type="radio" name="q7" value="C"> Peopleware</label>
+            <label><input type="radio" name="q7" value="D"> System Unit</label>
+        </div>
+
+        <div class="question">
+            <p>8. Which is NOT hardware?</p>
+            <label><input type="radio" name="q8" value="A"> Keyboard</label>
+            <label><input type="radio" name="q8" value="B"> Monitor</label>
+            <label><input type="radio" name="q8" value="C"> Mouse</label>
+            <label><input type="radio" name="q8" value="D"> Web Browser</label>
+        </div>
+
+        <div class="question">
+            <p>9. A programmer belongs to which category?</p>
+            <label><input type="radio" name="q9" value="A"> Hardware</label>
+            <label><input type="radio" name="q9" value="B"> Software</label>
+            <label><input type="radio" name="q9" value="C"> Peopleware</label>
+            <label><input type="radio" name="q9" value="D"> Application</label>
+        </div>
+
+        <div class="question">
+            <p>10. Which category includes applications and operating systems?</p>
+            <label><input type="radio" name="q10" value="A"> Hardware</label>
+            <label><input type="radio" name="q10" value="B"> Software</label>
+            <label><input type="radio" name="q10" value="C"> Peopleware</label>
+            <label><input type="radio" name="q10" value="D"> User</label>
+        </div>
+
+        <button type="button" onclick="checkQuiz2Answers()">Submit Quiz</button>
+        <button type="button" onclick="showQuizRecords()">View All Quiz Takers</button>
+        </form>
+        <div id="result"></div>
+        <div id="savedResults"></div>
+    `;
+}
+
+// Quiz Functions for Quiz 2
+function checkQuiz2Answers() {
+    const name = document.getElementById("studentName").value.trim();
+    if (name === "") {
+        alert("Please enter your name.");
+        return;
+    }
+
+    const answers = {
+        q1: "C", q2: "C", q3: "C", q4: "C", q5: "B",
+        q6: "C", q7: "C", q8: "D", q9: "B", q10: "B"
+    };
+
+    let score = 0;
+    for (let q in answers) {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        if (selected && selected.value === answers[q]) score++;
+    }
+
+    const record = { student: name, score: score, total: 10, date: new Date().toLocaleString() };
+    let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
+    records.push(record);
+    localStorage.setItem("quizRecords", JSON.stringify(records));
+
+    document.getElementById("result").innerHTML = `Thank you, <b>${name}</b><br>Your Score: ${score} / 10`;
+}
+
+// Keep the same showQuizRecords function for viewing results
+function showQuizRecords() {
+    let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
+    if(records.length === 0){
+        document.getElementById("savedResults").innerHTML = "No quiz takers yet.";
+        return;
+    }
+
+    let output = "<h3>Quiz Takers</h3>";
+    records.forEach((r, i) => {
+        output += `${i+1}. ${r.student} – ${r.score}/10 (${r.date})<br>`;
+    });
+
+    document.getElementById("savedResults").innerHTML = output;
+}
+
+        function showJHS() {
+            document.getElementById("content").innerHTML = `
+                <h1>‎Legal Basis</h1><br>
+                <p>&#127800;This project is aligned with the K to 12 Basic Education Curriculum of the Department of Education (DepEd) under Information and Communications Technology (ICT). It supports the use of technology-based and game-based learning to enhance students’ digital skills, creativity, and understanding of computer concepts.
+            `;
+        }
+
+function showAssessment3() {
+    document.getElementById("content").innerHTML = `
+        <h1>ICT Quiz 3: Peopleware, Hardware, Software</h1>
+        <p><strong>10 Items</strong></p>
+
+        <label><strong>Name:</strong></label>
+        <input type="text" id="studentName" placeholder="Enter your name" required>
+        <hr>
+
+        <form id="quizForm">
+
+        <div class="question">
+            <p>1. Which of the following is an example of peopleware?</p>
+            <label><input type="radio" name="q1" value="A"> Printer</label>
+            <label><input type="radio" name="q1" value="B"> Keyboard</label>
+            <label><input type="radio" name="q1" value="C"> System Analyst</label>
+            <label><input type="radio" name="q1" value="D"> Operating System</label>
+        </div>
+
+        <div class="question">
+            <p>2. The CPU is classified as:</p>
+            <label><input type="radio" name="q2" value="A"> Software</label>
+            <label><input type="radio" name="q2" value="B"> Peopleware</label>
+            <label><input type="radio" name="q2" value="C"> Hardware</label>
+            <label><input type="radio" name="q2" value="D"> Application</label>
+        </div>
+
+        <div class="question">
+            <p>3. Which refers to programs that control computer operations?</p>
+            <label><input type="radio" name="q3" value="A"> Hardware</label>
+            <label><input type="radio" name="q3" value="B"> Peopleware</label>
+            <label><input type="radio" name="q3" value="C"> Software</label>
+            <label><input type="radio" name="q3" value="D"> Device</label>
+        </div>
+
+        <div class="question">
+            <p>4. Who uses computers to perform tasks such as encoding and reporting?</p>
+            <label><input type="radio" name="q4" value="A"> Hardware</label>
+            <label><input type="radio" name="q4" value="B"> Software</label>
+            <label><input type="radio" name="q4" value="C"> Peopleware</label>
+            <label><input type="radio" name="q4" value="D"> Monitor</label>
+        </div>
+
+        <div class="question">
+            <p>5. Which is an example of hardware input device?</p>
+            <label><input type="radio" name="q5" value="A"> Mouse</label>
+            <label><input type="radio" name="q5" value="B"> PowerPoint</label>
+            <label><input type="radio" name="q5" value="C"> Antivirus</label>
+            <label><input type="radio" name="q5" value="D"> Programmer</label>
+        </div>
+
+        <div class="question">
+            <p>6. Microsoft Excel is an example of:</p>
+            <label><input type="radio" name="q6" value="A"> Hardware</label>
+            <label><input type="radio" name="q6" value="B"> Peopleware</label>
+            <label><input type="radio" name="q6" value="C"> Software</label>
+            <label><input type="radio" name="q6" value="D"> System Unit</label>
+        </div>
+
+        <div class="question">
+            <p>7. Which of the following is NOT peopleware?</p>
+            <label><input type="radio" name="q7" value="A"> Programmer</label>
+            <label><input type="radio" name="q7" value="B"> Network Technician</label>
+            <label><input type="radio" name="q7" value="C"> Computer Teacher</label>
+            <label><input type="radio" name="q7" value="D"> Scanner</label>
+        </div>
+
+        <div class="question">
+            <p>8. Which category does a mobile app belong to?</p>
+            <label><input type="radio" name="q8" value="A"> Hardware</label>
+            <label><input type="radio" name="q8" value="B"> Software</label>
+            <label><input type="radio" name="q8" value="C"> Peopleware</label>
+            <label><input type="radio" name="q8" value="D"> User</label>
+        </div>
+
+        <div class="question">
+            <p>9. A monitor is best described as:</p>
+            <label><input type="radio" name="q9" value="A"> Software</label>
+            <label><input type="radio" name="q9" value="B"> Peopleware</label>
+            <label><input type="radio" name="q9" value="C"> Hardware</label>
+            <label><input type="radio" name="q9" value="D"> Application</label>
+        </div>
+
+        <div class="question">
+            <p>10. Which term refers to the users of computer systems?</p>
+            <label><input type="radio" name="q10" value="A"> Hardware</label>
+            <label><input type="radio" name="q10" value="B"> Software</label>
+            <label><input type="radio" name="q10" value="C"> Peopleware</label>
+            <label><input type="radio" name="q10" value="D"> Device</label>
+        </div>
+
+        <button type="button" onclick="checkQuiz3Answers()">Submit Quiz</button>
+        <button type="button" onclick="showQuizRecords()">View All Quiz Takers</button>
+        </form>
+        <div id="result"></div>
+        <div id="savedResults"></div>
+    `;
+}
+
+// Quiz Functions for Quiz 3
+function checkQuiz3Answers() {
+    const name = document.getElementById("studentName").value.trim();
+    if (name === "") {
+        alert("Please enter your name.");
+        return;
+    }
+
+    const answers = {
+        q1: "C", q2: "C", q3: "C", q4: "C", q5: "A",
+        q6: "C", q7: "D", q8: "B", q9: "C", q10: "C"
+    };
+
+    let score = 0;
+    for (let q in answers) {
+        const selected = document.querySelector(`input[name="${q}"]:checked`);
+        if (selected && selected.value === answers[q]) score++;
+    }
+
+    const record = { student: name, score: score, total: 10, date: new Date().toLocaleString() };
+    let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
+    records.push(record);
+    localStorage.setItem("quizRecords", JSON.stringify(records));
+
+    document.getElementById("result").innerHTML = `Thank you, <b>${name}</b><br>Your Score: ${score} / 10`;
+}
+
+// Keep the same showQuizRecords function for viewing results
+function showQuizRecords() {
+    let records = JSON.parse(localStorage.getItem("quizRecords")) || [];
+    if(records.length === 0){
+        document.getElementById("savedResults").innerHTML = "No quiz takers yet.";
+        return;
+    }
+
+    let output = "<h3>Quiz Takers</h3>";
+    records.forEach((r, i) => {
+        output += `${i+1}. ${r.student} – ${r.score}/10 (${r.date})<br>`;
+    });
+
+    document.getElementById("savedResults").innerHTML = output;
+}
+
+function showProfile() {
+            document.body.classList.remove("fullscreen-game");
+            document.body.classList.remove("fullscreen-game");
+            document.getElementById("content").innerHTML = `
+                <h1>Content</h1><br>
+                <p>&#127800;This project is an educational Snake Game created using HTML coding. <br><br>
+                           In the game, the snake eats different computer parts such as the mouse,
+                           keyboard, monitor, CPU, and other hardware, software and peopleware components. <br><br>
+                           When the snake eats a computer part, information about that part appears on the screen,
+                           including its name and function.<br><br> The game combines learning and fun to help students 
+                           understand computer parts while playing.
+
+    
+    ‎‎</p> `;
+                
+            }
+
+
+        function showK() {
+            document.getElementById("content").innerHTML = `
+                <h1>References</h1><br>
+                <p>&#127800;Department of Education (DepEd). K to 12 ICT Curriculum Guide<br>
+‎
+<p>&#127800;‎HTML and basic game development tutorials<br>
+‎
+<p>&#127800;‎Online references about computer parts and their functions<br>
+‎
+            `;
+        }
+    
+    function showSnakeGame() {
+  document.getElementById("content").innerHTML = `
+    <h2>🐍 Snake Game</h2>
+    <button onclick="openSnakeFullscreen()">⛶ Fullscreen</button>
+
+    <iframe 
+      src="snake.html"
+      style="width:100%; height:500px; border:none;">
+    </iframe>
+  `;
+}
+
+function openSnakeFullscreen() {
+  const overlay = document.createElement("div");
+  overlay.className = "snake-overlay";
+
+  overlay.innerHTML = `
+    <button class="exit-btn" onclick="closeSnakeFullscreen()">✖ Exit</button>
+    <iframe src="snake.html"></iframe>
+  `;
+
+  document.body.appendChild(overlay);
+}
+
+function closeSnakeFullscreen() {
+  document.querySelector(".snake-overlay")?.remove();
+}
+
+    
+    
+    
+    function enterSnakeFullscreen() {
+  const frame = document.getElementById("snake-frame");
+
+  if (frame.requestFullscreen) {
+    frame.requestFullscreen();
+  } else if (frame.webkitRequestFullscreen) {
+    frame.webkitRequestFullscreen(); // Safari
+  } else if (frame.msRequestFullscreen) {
+    frame.msRequestFullscreen();
+  }
+}
+
+function closeSnakeFullscreen() {
+  const overlay = document.querySelector(".snake-overlay");
+  if (!overlay) return;
+
+  const iframe = overlay.querySelector("iframe");
+  iframe.src = iframe.src; // pauses / resets game
+
+  overlay.remove();
+}
+
+
+    
+    function showSnakeGame() {
+  document.getElementById("content").innerHTML = `
+    <h2>🐍 Snake Game</h2>
+    <button onclick="openSnakeFullscreen()">⛶ Fullscreen</button>
+
+    <iframe 
+      src="snake.html"
+      style="width:100%; height:500px; border:none;">
+    </iframe>
+  `;
+}
+
+    
+    function showHowtoPlay() {
+  document.getElementById("content").innerHTML = `
+    <h2>🐍 How To Play TechSnake</h2>
+        
+        <h4> Controls: </h4>Use and press the arrow buttons
+        to control your Snake.
+        <iframe 
+      src="Controls.html"
+      style="width:100%; height:370px; border:none;">
+    </iframe>
+        
+        <h4>Score:</h4> Your current score and high score is displayed
+        on the top left corner of your mobile device.
+       <iframe 
+      src="Score.html"
+      style="width:100%; height:370px; border:none;">
+    </iframe>  
+        
+       <h4> Information Screen:</h4>When you eat an item, Information about the item appears 
+        in the middle of your screen. Press continue to immediately return to your gameplay.
+        <iframe 
+      src="Continue.html"
+      style="width:100%; height:370px; border:none;">
+    </iframe>    
+        
+        <h4>Pause/Restart:</h4> To pause or restart your current game, press the Pause and Restart 
+        button located on the top right corner of your mobile device.
+       <iframe 
+      src="Pause.html"
+      style="width:100%; height:370px; border:none;">
+    </iframe>      
+        
+        <h4>Speed:</h4> To control the speed of your snake, press the "+" button to increase speed 
+        and press the "-" button to decrease speed.
+     <iframe 
+      src="Speed.html"
+      style="width:100%; height:370px; border:none;">
+    </iframe>      
+        
+        
+        
+  `;
+}
+
+    
+    
+    </script>
+
+</body>
+</html>           
