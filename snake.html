@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,viewport-fit=cover" />
+  <title>TechSnake — Mobile Friendly (Learning Edition)</title>
+  <style>
+    :root{
+      --bg:white;
+      --panel:#071029;
+      --accent:#22c55e;
+      --muted:#93c5fd;
+      --danger:#ef4444;
+      --glass: rgba(255,255,255,0.04);
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    html,body{
+      height:100%;
+      margin:0;
+      background: linear-gradient(180deg,var(--bg), #061019 120%);
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      color: #e6eef8;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    #game-wrap{
+      height:100%;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:env(safe-area-inset-top) 12px env(safe-area-inset-bottom);
+      box-sizing:border-box;
+    }
+
+    header{
+      width:100%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      max-width:960px;
+    }
+
+    .panel{
+      background:var(--panel);
+      padding:8px 12px;
+      border-radius:12px;
+      box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+    }
+
+    .title{font-weight:700; letter-spacing:0.2px}
+    .score{font-size:14px; color:var(--muted)}
+
+    .canvas-wrap{
+      width:100%;
+      max-width:960px;
+      flex:1 1 auto;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:6px 0 12px;
+      box-sizing:border-box;
+    }
+
+    canvas{
+      border-radius:14px;
+      background:var(--glass);
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+      touch-action: none;
+    }
+
+    .controls{
+      width:100%;
+      max-width:960px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:8px;
+    }
+
+    .btns{display:flex; gap:8px;}
+    .btn{
+      -webkit-tap-highlight-color: transparent;
+      background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+      border-radius:10px;
+      padding:8px 10px;
+      min-width:44px;
+      text-align:center;
+      font-weight:600;
+      user-select:none;
+      color:inherit;
+      border:none;
+    }
+
+    .dpad{
+      display:grid;
+      grid-template-columns:repeat(3,56px);
+      grid-template-rows:repeat(3,56px);
+      gap:8px;
+    }
+
+    .dpad .pad{
+      background:transparent;
+      border-radius:10px;
+      display:flex;
+      align-items:center;
+      justify-content:center
+    }
+
+    .dpad .pad.active{background:rgba(255,255,255,0.04)}
+
+    .hint{font-size:12px; color:#9fb4d9}
+
+    #learnModal{
+      position:fixed;
+      inset:0;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:rgba(0,0,0,0.65);
+      z-index:999;
+    }
+
+    #learnModal .box{
+      max-width:420px;
+      width:90%;
+      background:rgba(7,16,41,0.96);
+      border-radius:18px;
+      padding:18px;
+      text-align:center;
+      box-shadow:0 25px 60px rgba(0,0,0,0.8);
+      backdrop-filter: blur(8px);
+    }
+
+    #learnModal .icon{font-size:56px}
+    #learnModal p{font-size:14px;line-height:1.5;color:#dbe7ff}
+  
+  #gameOverModal{
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.75);
+  z-index: 1000;
+}
+
+#gameOverModal .box{
+  max-width: 320px;
+  width: 90%;
+  background: rgba(7,16,41,0.96);
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.8);
+  backdrop-filter: blur(8px);
+}
+
+  
+  </style>
+</head>
+
+<body>
+<div id="game-wrap">
+  <header>
+    <div class="panel">
+      <div class="title">TechSnake</div>
+      <div class="score" id="best">Best: 0</div>
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center;">
+      <div class="panel" style="text-align:center;">
+        <div style="font-weight:800;font-size:18px" id="score">0</div>
+        <div class="score">Score</div>
+      </div>
+      <div class="panel" style="display:flex;gap:8px;">
+        <button class="btn" id="btn-pause">Pause</button>
+        <button class="btn" id="btn-restart">Restart</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="canvas-wrap">
+    <canvas id="game" width="400" height="600"></canvas>
+  </div>
+
+  <div class="controls">
+    <div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start;">
+      <div class="hint">Tap arrows to play. <br>• Speed Controls.</div>
+      <div class="btns">
+        <button class="btn" id="speed-down">–</button>
+        <button class="btn" id="speed-up">+</button>
+      </div>
+    </div>
+
+    <div class="dpad" id="dpad">
+      <div class="pad"></div>
+      <div class="pad" data-dir="up">▲</div>
+      <div class="pad"></div>
+
+      <div class="pad" data-dir="left">◀</div>
+      <div class="pad" style="opacity:0.8">●</div>
+      <div class="pad" data-dir="right">▶</div>
+
+      <div class="pad"></div>
+      <div class="pad" data-dir="down">▼</div>
+      <div class="pad"></div>
+    </div>
+  </div>
+</div>
+
+<div id="learnModal">
+  <div class="box">
+    <div class="icon" id="learnIcon"></div>
+    <h2 id="learnTitle"></h2>
+    <div class="score" id="learnType"></div>
+    <p id="learnText"></p>
+    <button class="btn" id="learnClose">Continue</button>
+  </div>
+</div>
+
+  <div id="gameOverModal">
+  <div class="box">
+    <h2>Game Over</h2>
+    <div class="score" id="finalScore">Score: 0</div>
+    <button class="btn" id="gameOverRestart">Restart</button>
+  </div>
+</div>
+
+  
+<script>
+const learningItems = [
+  // HARDWARE
+{icon:'🧠',title:'CPU',type:'Hardware',text:'The CPU is the main processing unit of a computer. It executes instructions from programs and manages system operations. Faster CPUs improve overall system performance.'},
+{icon:'💾',title:'RAM',type:'Hardware',text:'RAM stores data temporarily while programs are running. It allows fast access to frequently used information. More RAM helps with multitasking and speed.'},
+{icon:'🎮',title:'GPU',type:'Hardware',text:'The GPU handles graphics and visual rendering tasks. It is essential for gaming, video editing, and 3D applications. Some GPUs also accelerate AI workloads.'},
+{icon:'⚡',title:'SSD',type:'Hardware',text:'An SSD stores data using flash memory. It provides much faster read and write speeds than hard drives. This results in quicker boot and load times.'},
+{icon:'🗄️',title:'HDD',type:'Hardware',text:'A hard disk drive stores large amounts of data magnetically. It is slower than an SSD but more affordable. HDDs are often used for backups.'},
+{icon:'🖥️',title:'Monitor',type:'Hardware',text:'The monitor displays visual output from the computer. Screen size and resolution affect clarity and comfort. Modern monitors support high refresh rates.'},
+{icon:'⌨️',title:'Keyboard',type:'Hardware',text:'The keyboard is used to input text and commands. It allows interaction with software and systems. Some keyboards include programmable keys.'},
+{icon:'🖱️',title:'Mouse',type:'Hardware',text:'The mouse controls the on-screen pointer. It helps with navigation, selection, and precision tasks. Ergonomic designs reduce strain.'},
+{icon:'🎧',title:'Headphones',type:'Hardware',text:'Headphones output audio directly to the user. They improve privacy and sound clarity. Many include noise-canceling features.'},
+{icon:'🔊',title:'Speakers',type:'Hardware',text:'Speakers produce sound from a computer. They are used for music, videos, and alerts. Quality varies by size and design.'},
+{icon:'📷',title:'Webcam',type:'Hardware',text:'A webcam captures video input. It is commonly used for video calls and streaming. Higher resolution improves image quality.'},
+{icon:'🎤',title:'Microphone',type:'Hardware',text:'A microphone captures audio input. It is used for communication, recording, and voice commands. Clear audio improves collaboration.'},
+{icon:'📡',title:'Network Card',type:'Hardware',text:'A network card connects a computer to a network. It enables internet and local communication. It can be wired or wireless.'},
+{icon:'🔋',title:'Power Supply',type:'Hardware',text:'The power supply delivers electricity to computer components. It converts power to usable voltage levels. A reliable PSU prevents hardware damage.'},
+{icon:'🧩',title:'Motherboard',type:'Hardware',text:'The motherboard connects all hardware components. It allows communication between the CPU, memory, and devices. Its features determine expandability.'},
+{icon:'📀',title:'Optical Drive',type:'Hardware',text:'An optical drive reads CDs and DVDs. It is used for media playback and data access. Usage has declined with digital storage.'},
+{icon:'🖨️',title:'Printer',type:'Hardware',text:'A printer produces physical copies of digital documents. It is used in homes and offices. Printers can be inkjet or laser.'},
+
+// SOFTWARE
+{icon:'🪟',title:'Operating System',type:'Software',text:'The operating system manages hardware and software resources. It provides a user interface for interaction. Examples include Windows and Linux.'},
+{icon:'🌐',title:'Web Browser',type:'Software',text:'A web browser allows access to the internet. It displays websites and web applications. Browsers also support extensions.'},
+{icon:'📝',title:'Word Processor',type:'Software',text:'Word processing software is used to create documents. It supports formatting, editing, and printing. Examples include Microsoft Word.'},
+{icon:'📊',title:'Spreadsheet',type:'Software',text:'Spreadsheet software organizes data in tables. It supports calculations and charts. It is widely used for analysis.'},
+{icon:'📽️',title:'Presentation Software',type:'Software',text:'Presentation software creates slide-based content. It is used for meetings and teaching. Visual elements enhance communication.'},
+{icon:'🖌️',title:'Graphic Editor',type:'Software',text:'Graphic editing software allows image creation and modification. It is used by designers and artists. Advanced tools enable detailed work.'},
+{icon:'🎬',title:'Video Editor',type:'Software',text:'Video editing software edits and enhances videos. It supports effects, transitions, and audio syncing. It is used in media production.'},
+{icon:'🔒',title:'Antivirus',type:'Software',text:'Antivirus software protects against malware. It scans files and monitors activity. Regular updates improve security.'},
+{icon:'☁️',title:'Cloud Storage',type:'Software',text:'Cloud storage stores files online. It allows access from multiple devices. Data is often backed up automatically.'},
+{icon:'📧',title:'Email Client',type:'Software',text:'An email client manages electronic messages. It organizes inboxes and attachments. It improves communication efficiency.'},
+{icon:'💬',title:'Messaging App',type:'Software',text:'Messaging apps enable instant communication. They support text, voice, and video. Many include group features.'},
+{icon:'🧮',title:'Database System',type:'Software',text:'Database software stores structured data. It allows fast retrieval and updates. It is essential for large applications.'},
+{icon:'⚙️',title:'Device Driver',type:'Software',text:'Drivers allow hardware to communicate with the OS. They ensure proper device functionality. Outdated drivers can cause issues.'},
+{icon:'🧑‍💻',title:'IDE',type:'Software',text:'An IDE helps developers write and debug code. It combines tools in one environment. It improves productivity.'},
+{icon:'📦',title:'Package Manager',type:'Software',text:'A package manager installs and updates software. It handles dependencies automatically. It simplifies system maintenance.'},
+{icon:'🧠',title:'AI Software',type:'Software',text:'AI software performs intelligent tasks. It can analyze data and make predictions. It is used across many industries.'},
+{icon:'🕹️',title:'Game Software',type:'Software',text:'Game software provides interactive entertainment. It uses graphics, sound, and logic. Performance depends on hardware.'},
+
+// PEOPLEWARE
+{icon:'👨‍💻',title:'Programmer',type:'Peopleware',text:'A programmer writes and maintains code. They create software applications. Their skills affect software quality.'},
+{icon:'🧑‍🔧',title:'Hardware Technician',type:'Peopleware',text:'A hardware technician installs and repairs devices. They diagnose physical issues. Their work ensures system reliability.'},
+{icon:'👩‍💼',title:'Project Manager',type:'Peopleware',text:'A project manager plans and oversees projects. They manage time, budget, and teams. Good coordination ensures success.'},
+{icon:'🧑‍🏫',title:'IT Trainer',type:'Peopleware',text:'An IT trainer teaches technology skills. They help users understand systems. Training improves productivity.'},
+{icon:'🧑‍💼',title:'System Administrator',type:'Peopleware',text:'A system administrator manages IT infrastructure. They ensure uptime and security. Their role is critical in organizations.'},
+{icon:'👨‍🎨',title:'UI/UX Designer',type:'Peopleware',text:'A UI/UX designer improves user experience. They design intuitive interfaces. Good design increases usability.'},
+{icon:'🧑‍🔍',title:'QA Tester',type:'Peopleware',text:'A QA tester checks software for bugs. They ensure quality before release. Testing improves reliability.'},
+{icon:'🧑‍💻',title:'Data Analyst',type:'Peopleware',text:'A data analyst interprets data insights. They help organizations make decisions. Accuracy is essential.'},
+{icon:'👩‍🔐',title:'Security Analyst',type:'Peopleware',text:'A security analyst protects systems from threats. They monitor vulnerabilities and attacks. Prevention reduces risk.'},
+{icon:'🧑‍💬',title:'Technical Support',type:'Peopleware',text:'Technical support assists users with issues. They solve problems and give guidance. Their role improves user satisfaction.'},
+{icon:'👨‍💼',title:'IT Manager',type:'Peopleware',text:'An IT manager oversees technology strategy. They align IT with business goals. Leadership is essential.'},
+{icon:'🧑‍🏗️',title:'Network Engineer',type:'Peopleware',text:'A network engineer designs and maintains networks. They ensure secure connectivity. Performance depends on their expertise.'},
+{icon:'👤',title:'End User',type:'Peopleware',text:'An end user interacts with the system. Their needs guide system design. Usability matters most to them.'}
+
+  
+  
+  ];
+  
+  // 🔁 Non-repeating learning item pool
+let learningPool = [...learningItems];
+
+function getNextLearningItem() {
+  if (learningPool.length === 0) {
+    // refill & reshuffle once all items are used
+    learningPool = [...learningItems];
+  }
+  const index = Math.floor(Math.random() * learningPool.length);
+  return learningPool.splice(index, 1)[0];
+}
+
+  
+
+(() => {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+
+  const scoreEl = document.getElementById('score');
+  const bestEl = document.getElementById('best');
+  const btnPause = document.getElementById('btn-pause');
+  const btnRestart = document.getElementById('btn-restart');
+  const speedUp = document.getElementById('speed-up');
+  const speedDown = document.getElementById('speed-down');
+  const dpad = document.getElementById('dpad');
+
+  const learnModal = document.getElementById('learnModal');
+  const learnIcon = document.getElementById('learnIcon');
+  const learnTitle = document.getElementById('learnTitle');
+  const learnType = document.getElementById('learnType');
+  const learnText = document.getElementById('learnText');
+  const learnClose = document.getElementById('learnClose');
+  const gameOverModal = document.getElementById('gameOverModal');
+  const finalScore = document.getElementById('finalScore');
+  const gameOverRestart = document.getElementById('gameOverRestart');
+
+function showGameOver(){
+  running = false;
+  finalScore.textContent = 'Score: ' + score;
+  gameOverModal.style.display = 'flex';
+}
+
+gameOverRestart.onclick = () => {
+  gameOverModal.style.display = 'none';
+  init();
+};
+
+
+  const config = { cellSize:16, initialLength:4, fps:8, minFps:4, maxFps:18 };
+  let dpr = Math.max(1, window.devicePixelRatio || 1);
+  let canvasW, canvasH, cols, rows;
+  let snake=[], dir={x:1,y:0}, nextDir=null;
+  let apple=null, running=true, score=0;
+  let best=parseInt(localStorage.getItem('snake_best')||'0',10)||0;
+  let lastTick=0, speed=config.fps;
+
+  bestEl.textContent='Best: '+best;
+
+  function fitCanvas(){
+    const maxWidth=Math.min(innerWidth-24,960);
+    const maxHeight=Math.max(innerHeight-180,260);
+    let cssW=maxWidth;
+    let cssH=Math.min(maxHeight,Math.round(cssW*(16/9)));
+    if(innerHeight>innerWidth) cssH=Math.min(maxHeight,Math.round(innerHeight*0.58));
+    canvas.style.width=cssW+'px';
+    canvas.style.height=cssH+'px';
+    canvasW=Math.floor(cssW*dpr);
+    canvasH=Math.floor(cssH*dpr);
+    canvas.width=canvasW;
+    canvas.height=canvasH;
+    const cell=Math.round(config.cellSize*dpr);
+    cols=Math.floor(canvasW/cell);
+    rows=Math.floor(canvasH/cell);
+    config._cellPx=cell;
+  }
+
+  function init(){
+    fitCanvas();
+    const cx=Math.floor(cols/2), cy=Math.floor(rows/2);
+    snake=[];
+    for(let i=0;i<config.initialLength;i++) snake.push({x:cx-i,y:cy});
+    dir={x:1,y:0}; nextDir=null;
+    placeApple();
+    score=0; scoreEl.textContent=score;
+    running=true; lastTick=performance.now();
+  }
+
+  function placeApple(){
+  const used=new Set(snake.map(p=>p.x+':'+p.y));
+  while(true){
+    const ax=Math.floor(Math.random()*cols);
+    const ay=Math.floor(Math.random()*rows);
+    if(!used.has(ax+':'+ay)){
+      const item = getNextLearningItem(); // ✅ no repeats
+      apple={x:ax,y:ay,item};
+      return;
+    }
+  }
+}
+
+
+  function showLearning(item){
+    running=false;
+    learnIcon.textContent=item.icon;
+    learnTitle.textContent=item.title;
+    learnType.textContent=item.type;
+    learnText.textContent=item.text;
+    learnModal.style.display='flex';
+  }
+
+  learnClose.onclick=()=>{ learnModal.style.display='none'; running=true; };
+
+  function step(){
+    if(nextDir && !(nextDir.x===-dir.x&&nextDir.y===-dir.y)) dir=nextDir;
+    nextDir=null;
+    const h={x:(snake[0].x+dir.x+cols)%cols,y:(snake[0].y+dir.y+rows)%rows};
+    if (snake.some(s => s.x === h.x && s.y === h.y)) {
+  showGameOver();
+  return;
+}
+
+    snake.unshift(h);
+    if(h.x===apple.x&&h.y===apple.y){
+      score++; scoreEl.textContent=score;
+      if(score>best){best=score;localStorage.setItem('snake_best',best);bestEl.textContent='Best: '+best;}
+      showLearning(apple.item);
+      placeApple();
+    } else snake.pop();
+  }
+
+  function draw(){
+    const cell=config._cellPx;
+    ctx.clearRect(0,0,canvasW,canvasH);
+    ctx.fillStyle='#051019';
+    ctx.fillRect(0,0,canvasW,canvasH);
+
+if (!apple || !apple.item) return;
+ctx.font = `${cell}px system-ui, Apple Color Emoji, Segoe UI Emoji, Noto Color Emoji`;
+ctx.textAlign = 'center';
+ctx.textBaseline = 'middle';
+ctx.fillText(
+  apple.item.icon,
+  apple.x * cell + cell / 2,
+  apple.y * cell + cell / 2
+);
+
+
+
+    snake.forEach((p,i)=>{
+      ctx.fillStyle=i===0?'#22c55e':'rgba(34,197,94,0.7)';
+      ctx.fillRect(p.x*cell,p.y*cell,cell,cell);
+    });
+  }
+
+  function loop(now){
+    
+    if (!snake.length) return requestAnimationFrame(loop);
+    
+    if(now-lastTick>1000/speed){ if(running)step(); draw(); lastTick=now; }
+    requestAnimationFrame(loop);
+  }
+
+  window.addEventListener('keydown',e=>{
+    if(e.key==='ArrowUp')nextDir={x:0,y:-1};
+    if(e.key==='ArrowDown')nextDir={x:0,y:1};
+    if(e.key==='ArrowLeft')nextDir={x:-1,y:0};
+    if(e.key==='ArrowRight')nextDir={x:1,y:0};
+    if(e.key===' ') running=!running;
+  });
+
+  btnPause.onclick=()=>{running=!running;btnPause.textContent=running?'Pause':'Resume'};
+  btnRestart.onclick=()=>init();
+  speedUp.onclick=()=>speed=Math.min(config.maxFps,speed+1);
+  speedDown.onclick=()=>speed=Math.max(config.minFps,speed-1);
+
+  dpad.querySelectorAll('[data-dir]').forEach(b=>{
+    b.onclick=()=>{const d=b.dataset.dir;
+      if(d==='up')nextDir={x:0,y:-1};
+      if(d==='down')nextDir={x:0,y:1};
+      if(d==='left')nextDir={x:-1,y:0};
+      if(d==='right')nextDir={x:1,y:0};
+    };
+  });
+
+  init();
+  requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
